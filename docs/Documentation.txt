@@ -1,0 +1,32 @@
+Using trigonometric mathematics were not accurate or rather, could not be made fast enough on the Atmega328p.
+Fast motions were inaccurately measured and I didn't manage to mitigate the gyro drift with any filter I tried.
+
+I will listen to the many recomendations online and try to switch to quaternion calculations instead.
+This discussion pretty much sums up my findings.
+
+https://arduino.stackexchange.com/questions/90233/gyro-reading-of-mpu6050-drifts-too-much-on-fast-changes-only
+
+A comment with useful information and thoughts:
+
+"Consider what might happen if the code or hardware dead reckoning capabilities were too slow to accurately sample short events. Such as a sudden stop. Robbed of the opportunity to integrate a fast deceleration event, the code and hardware might continue to report motion.
+
+To speed up code execution, consider switching from trigonometry based calculations to quaternion calculations. In general this replaces time consuming repetitive summation algorithms with simple math calculations more suitable for embedded processors.
+
+To speed up the hardware, consider an Arduino platform with a faster processor.
+
+Also consider more creative solutions suitable for your application:
+
+If angular momentum is more important than linear motion sample the accelerometer only every other time through your main loop.
+Or, if motion is totally random, and the device is on Earth, consider zero-calibrating the gyroscope when there is no movement perceived by the accelerometer. Specifically, when there is a 9.8m/s*s vector sensed by the accelerometer and the pitch, roll and yaw of the accelerometer is not changing."
+
+I had an idea of porting the project from the Arduino IDE to use pure c++ but after research I decided
+I did not have enough to gain on that migration compared to the enormous workload it would take.
+Since Arduino is a subset of C++ 11 I still build on my C++ knowledge while using the Arduino IDE.
+Some functionalityy is hidden and some are added but it is still C++ in essens.
+
+Thinking of updating from UNO to mega (Atmega3289 to Atmega2560) for more pins and memory.
+Right now I dont have enough pins to be able to move the head/neck-servo.
+
+Update is that quaternions really worked miracles. Grabbing the values from the DMP is much better.
+However, I still have some weird behaviour on the roll. It centers back to initial origo instead of staying in position.
+This is also true but expected for yaw. Pitch is damn near perfect though so I have high hopes for roll. 
