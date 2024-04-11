@@ -25,12 +25,12 @@ float[] data1 = new float[width];
 float[] data2 = new float[width];
 float[] data3 = new float[width];
 String str1;
-String str2 = "COM3";
+String str2 = "COM7";
 String[] ports = Serial.list();
 boolean serial_init = false;
 
 void setup() {
-  fullScreen(P3D, SPAN);
+  fullScreen(P3D, 1);
   frameRate(100);
   smooth();
 

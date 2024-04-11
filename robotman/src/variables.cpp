@@ -3,23 +3,22 @@
 MPU6050 mpu(MPU);
 
 char Bodypart_name[BODYPART_COUNT][SMALL_STRING_LENGTH]{
-    "LEFT_SHOULDER",
-    "RIGHT_SHOULDER",
-    "LEFT_ARM",
-    "RIGHT_ARM",
-    "LEFT_WRIST",
-    "RIGHT_WRIST",
-    "LEFT_HIP",
-    "RIGHT_HIP",
-    "LEFT_THIGH",
-    "RIGHT_THIGH",
-    "LEFT_KNEE",
-    "RIGHT_KNEE",
-    "LEFT_ANKLE",
-    "RIGHT_ANKLE",
-    "LEFT_FOOT",
-    "RIGHT_FOOT",
-    "HEAD"  // Not assigned : Not enough pins on the UNO motor shield
+    "L_SHOULDER",
+    "R_SHOULDER",
+    "L_ARM",
+    "R_ARM",
+    "L_WRIST",
+    "R_WRIST",
+    "L_HIP",
+    "R_HIP",
+    "L_THIGH",
+    "R_THIGH",
+    "L_KNEE",
+    "R_KNEE",
+    "L_ANKLE",
+    "R_ANKLE",
+    "L_FOOT",
+    "R_FOOT",
 };
 
 int16_t joint_definitions[BODYPART_COUNT][JOINT_PLACEMENT_COUNT]{
@@ -38,8 +37,8 @@ int16_t joint_definitions[BODYPART_COUNT][JOINT_PLACEMENT_COUNT]{
     {280, 500, 1},   // LEFT_ANKLE      12
     {300, 520, -1},  // RIGHT_ANKLE     13
     {200, 400, 1},   // LEFT_FOOT       14
-    {200, 500, -1},  // RIGHT_FOOT      15
-    {100, 520, 1}    // HEAD            16
+    {200, 500, -1},  // RIGHT_FOOT      15 
+    //{100, 520, 1}    // HEAD            16
 };
 
 int16_t stance_array[BODYPART_COUNT][STANCE_COUNT]{
@@ -49,24 +48,25 @@ int16_t stance_array[BODYPART_COUNT][STANCE_COUNT]{
     {150, 150, 150},  // RIGHT_ARM
     {300, 120, 300},  // LEFT_WRIST
     {220, 420, 220},  // RIGHT_WRIST
-    {240, 240, 240},  // LEFT_HIP
-    {260, 260, 260},  // RIGHT_HIP
-    {390, 500, 160},  // LEFT_THIGH
-    {200, 100, 410},  // RIGHT_THIGH
-    {250, 400, 60},   // LEFT_KNEE
-    {250, 100, 500},  // RIGHT_KNEE
-    {350, 430, 225},  // LEFT_ANKLE
-    {340, 340, 500},  // RIGHT_ANKLE
-    {300, 300, 325},  // LEFT_FOOT
-    {370, 370, 370},  // RIGHT_FOOT
-    {255, 255, 255}   // HEAD
+    {250, 240, 240},  // LEFT_HIP
+    {300, 260, 260},  // RIGHT_HIP 
+    {435, 500, 390},  // LEFT_THIGH
+    {155, 100, 200},  // RIGHT_THIGH
+    {300, 400, 250},  // LEFT_KNEE
+    {200, 100, 250},  // RIGHT_KNEE
+    {390, 430, 350},  // LEFT_ANKLE
+    {355, 340, 340},  // RIGHT_ANKLE
+    {300, 300, 300},  // LEFT_FOOT
+    {370, 370, 370},  // RIGHT_FOOT 
+    //{255, 255, 255}   // HEAD
 };
 
 JointCurrentPosition joint_current_position[BODYPART_COUNT];
 
-int STANCE_CURRENT{0};
+Stance STANCE_CURRENT{STANCE_IDLE};
 bool BALANCE_MODE{false};
 bool DEBUG_MODE{false};
+bool MENY_LIST{false};
 
 // Create a PWM object from the Adafruit library
 Adafruit_PWMServoDriver pwm{Adafruit_PWMServoDriver()};

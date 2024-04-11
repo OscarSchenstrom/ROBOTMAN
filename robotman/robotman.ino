@@ -6,20 +6,26 @@
 #include "inc/variables.h"
 
 #define INPUT_HANDLER true
-#define SAFEMODE true
 
 void setup() {
     // Initialize serial communication
-    unsigned int baud_rate{9600};
-    Serial.begin(baud_rate);
+    Serial.begin(9600);
     delay(100);
 
     pwm.begin();
     pwm.setOutputMode(false);
 
-    // activate I2C pull up resistors
-    digitalWrite(SDA, 1);
-    digitalWrite(SCL, 1);
+    const byte pwm_freq{50};
+    pwm.setPWMFreq(pwm_freq);
+
+    // Initialize the pulse that will control the motors
+    pwm.setOutputMode(true);
+    delay(100);
+
+    Serial.println(F("Idle Stance"));
+    delay(2000);
+    switch_stance(STANCE_IDLE);
+    delay(500);
 
 #if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__)
     // Iinitialize accelerometer
@@ -29,16 +35,6 @@ void setup() {
     pinMode(trigPin, OUTPUT);  // Sets the trigPin as an Output
     pinMode(echoPin, INPUT);   // Sets the echoPin as an Input
 #endif
-
-    const byte pwm_freq{50};  // Hz
-    pwm.setPWMFreq(pwm_freq);
-
-    // Initialize the pulse that will control the motors
-    pwm.setOutputMode(true);
-    delay(100);
-
-    // Set robot initial stance from boot
-    switch_stance(STANCE_IDLE);
 
     // If MPU programming failed, don't try to do anything, try again
     if (!dmpReady)

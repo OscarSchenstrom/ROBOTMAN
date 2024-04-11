@@ -4,9 +4,10 @@ For the time being, there is only one ROBOT MAN.
 The code is callibrated for this specific unit.
 
 ## VSC extentions:
-C/C++ : ms-vscode.cpptools
-Arduino : vsciot-vscode.vscode-arduino
-Processing Language : Tobiah.language-pde
+**C/C++** : ms-vscode.cpptools <br>
+**Arduino** : vsciot-vscode.vscode-arduino <br>
+**Processing Language** : Tobiah.language-pde <br>
+**Command Runner** : edonet.vscode-command-runner <br>
 
 ## Setting up project using Serial monitor
 
@@ -117,3 +118,20 @@ Create a **tasks.json** file with the following input:
 ### Running Robotman with GUI
 
 CTRL+SHIFT+B - Run processing
+
+### Upload/Flash sketch to UNO R4 Wi-Fi in VSCode
+
+* If you don't have arduino-cli, download and install from this website https://arduino.github.io/arduino-cli/0.36/installation/.
+* If you run Linux - start by making python script executable: ``chmod +x arduino_compile_upload_r4_wifi.py``
+
+* Open Extension view in VSCode
+* Search "Command Runner" and install it
+* Open Command Palette (Ctrl+Shift+P) and select ``Preference: Open User Settings``
+* Search for "Command Runner: Commands" and click ``Edit in settings.json``
+* Add the following configuration to your settings.json file:
+	```json
+  "command-runner.commands": {
+   		"Compile and Upload Sketch": "path/to/arduino_compile_upload_r4_wifi.py",
+	}
+  ```
+* Now you can run the script by pressing Ctrl+Shift+R and choosing ``Compile and Upload Sketch``
