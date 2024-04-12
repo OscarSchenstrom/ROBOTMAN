@@ -13,10 +13,12 @@
 
 #define INTERRUPT_PIN 2  // use pin 2 on Arduino Uno & most boards
 #define MPU 0x68
-
+#define NORMALIZED_RANGE_MIN  -100
+#define NORMALIZED_RANGE_MAX  100
 // Set an error value for int16_t
 #define INT16_ERROR_VALUE INT16_MIN
-
+#define Stance uint8_t
+#define Bodypart uint8_t
 #define SMALL_STRING_LENGTH 16
 
 extern MPU6050 mpu;
@@ -29,7 +31,7 @@ extern MPU6050 mpu;
  ========================================================================= */
 
 // Assign each joint with a unique port address
-enum Bodyparts : int {
+enum Bodyparts : Bodypart {
     LEFT_SHOULDER,
     RIGHT_SHOULDER,
     LEFT_ARM,
@@ -46,13 +48,12 @@ enum Bodyparts : int {
     RIGHT_ANKLE,
     LEFT_FOOT,
     RIGHT_FOOT,
-    HEAD,  // Not assigned : Not enough pins on the UNO motor shield
     BODYPART_COUNT
 };
 
 extern char Bodypart_name[BODYPART_COUNT][SMALL_STRING_LENGTH];
 
-enum JointDefintions : int {
+enum JointDefintions : uint8_t {
     JOINT_MIN,
     JOINT_MAX,
     JOINT_DIR,
@@ -61,7 +62,7 @@ enum JointDefintions : int {
 
 extern int16_t joint_definitions[BODYPART_COUNT][JOINT_PLACEMENT_COUNT];
 
-enum Stances : int {
+enum Stances : Stance {
     STANCE_IDLE,
     STANCE_SQUAT,
     STANCE_INVERSE_SQUAT,
@@ -77,9 +78,10 @@ typedef struct JointCurrentPosition {
 
 extern JointCurrentPosition joint_current_position[BODYPART_COUNT];
 
-extern int STANCE_CURRENT;
+extern Stance STANCE_CURRENT;
 extern bool BALANCE_MODE;
 extern bool DEBUG_MODE;
+extern bool MENU_LIST;
 
 // Create a PWM object from the Adafruit library
 extern Adafruit_PWMServoDriver pwm;

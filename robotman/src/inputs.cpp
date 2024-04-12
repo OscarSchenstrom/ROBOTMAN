@@ -10,94 +10,115 @@ void handle_inputs() {
     static bool output_mode_state{true};
     static char input_string[SMALL_STRING_LENGTH];
 
+    if(!MENU_LIST){
+        Serial.println();
+        Serial.println(F("Command Meny"));
+        Serial.println(F("i - Initial Stance"));
+        Serial.println(F("m - Move Limbs Meny"));
+        Serial.println(F("B - Balance Mode Toggle"));
+        Serial.println(F("C - PWM Output Mode Toggle"));
+        Serial.println(F("D - Debug Toggle"));
+        Serial.println(F("S - List Servo Positions"));
+        Serial.println(F("s - Switch stance"));
+        Serial.println(F("c - to return to this meny"));
+        MENU_LIST = true;
+    }
+
     if (read_data(input_string)) {
-        int input_int{string_to_int(input_string)};
+        int16_t input_int{string_to_int(input_string)};
 
         if (move_limbs_mode) {
             if (move_limbs_handler(input_string)) {
                 move_limbs_mode = false;
             }
+        } else if (input_string[0] == 'c') {
+            MENU_LIST = false;
         } else if (input_string[0] == 'i') {
-            Serial.println("Initial stance");
+            Serial.println(F("Init stance"));
             STANCE_CURRENT = STANCE_IDLE;
             switch_stance(STANCE_CURRENT);
+            MENU_LIST = false;
         } else if (input_string[0] == 'm') {
             print_body_parts();
             move_limbs_mode = true;
         } else if (input_string[0] == 'B') {
             if (BALANCE_MODE) {
                 BALANCE_MODE = false;
-                Serial.println("Balance mode OFF");
+                Serial.println(F("Balance OFF"));
             } else {
                 pwm.setOutputMode(false);
                 if (calibrate_mpu()) {
                     output_mode_state = true;
                     BALANCE_MODE = true;
-                    Serial.println("Balance mode ON");
+                    Serial.println(F("Balance ON"));
                 }
                 pwm.setOutputMode(true);
             }
+            MENU_LIST = false;
         } else if (input_string[0] == 'C') {
             if (output_mode_state) {
-                Serial.println("Input off");
+                Serial.println(F("Input off"));
                 output_mode_state = false;
             } else {
-                Serial.println("Input on");
+                Serial.println(F("Input on"));
                 output_mode_state = true;
             }
             pwm.setOutputMode(output_mode_state);
+            MENU_LIST = false;
         } else if (input_string[0] == 'D') {
             if (DEBUG_MODE) {
                 DEBUG_MODE = false;
-                Serial.println("DEBUG_MODE off");
+                Serial.println(F("DEBUG_MODE off"));
+                MENU_LIST = false;
             } else {
                 DEBUG_MODE = true;
-                Serial.println("DEBUG_MODE on");
+                Serial.println(F("DEBUG_MODE on"));
             }
         } else if (input_string[0] == 'S') {
             for (int i{0}; i < BODYPART_COUNT; i++) {
                 Serial.print(i);
-                Serial.print("\t: ");
+                Serial.print(F("\t: "));
                 Serial.print(joint_current_position[i].actual_position);
-                Serial.print(" : ");
+                Serial.print(F(" : "));
                 Serial.print(joint_current_position[i].normalized_position);
-                Serial.print("\t: ");
+                Serial.print(F("\t: "));
                 Serial.println(Bodypart_name[i]);
             }
+            Serial.println(F("c to return"));
         } else if (input_string[0] == 's') {
-            if (++STANCE_CURRENT >= STANCE_COUNT) {
-                STANCE_CURRENT = 0;
+            if ((++STANCE_CURRENT) >= STANCE_COUNT) {
+                STANCE_CURRENT = STANCE_IDLE;
             }
             switch_stance(STANCE_CURRENT);
+            MENU_LIST = false;
         } else if (input_int >= 0 && input_int <= 16) {
             body_part_max_min(input_int);
+            MENU_LIST = false;
         }
     }
 }
 
 void print_body_parts() {
-    Serial.println("MOVE LIBS MODE");
-    Serial.println("-----------------");
+    Serial.println(F("MOVE LIMBS"));
     for (int i = 0; i < BODYPART_COUNT; i++) {
         Serial.print(i);
-        Serial.print(" : ");
+        Serial.print(F(" : "));
         Serial.print(Bodypart_name[i]);
-        Serial.print("\t");
+        Serial.print(F("\t"));
         if ((i % 2) == 1) {
             Serial.println();
         }
     }
     Serial.println();
-    Serial.println("c to return");
-    Serial.println("-----------------");
-    Serial.println("AWAITING INPUT");
+    Serial.println(F("c to return"));
 }
 
 bool move_limbs_handler(char* serial_input_string) {
     static int16_t limb{-1};
     if (serial_input_string[0] == 'c') {
         if (limb == -1) {
-            Serial.println("exiting");
+            Serial.println(F("exiting"));
+            MENU_LIST = false;
             return true;
         } else {
             limb = -1;
@@ -108,28 +129,28 @@ bool move_limbs_handler(char* serial_input_string) {
 
     int16_t input_int{string_to_int(serial_input_string)};
     if (input_int == INT16_ERROR_VALUE) {
-        Serial.println("Not a valid value");
+        Serial.println(F("Not a valid value"));
     } else if (limb == -1) {
         limb = input_int;
         if (limb >= BODYPART_COUNT) {
-            Serial.println("Incorrect limb choice");
+            Serial.println(F("Incorrect limb"));
             limb = -1;
         } else {
             Serial.print(Bodypart_name[limb]);
-            Serial.println(" chosen. Choose between -100 and 100");
-            Serial.print("Current position: ");
+            Serial.println(F(" chosen. Choose between -100 and 100"));
+            Serial.print(F("Current position: "));
             Serial.println(joint_current_position[limb].normalized_position);
-            Serial.println("c to return");
+            Serial.println(F("c to return"));
         }
     } else {
         move_limb_to(limb, input_int);
         Serial.print(Bodypart_name[limb]);
-        Serial.print(" moved to ");
+        Serial.print(F(" moved to "));
         Serial.print(joint_current_position[limb].actual_position);
-        Serial.print(" : ");
+        Serial.print(F(" : "));
         Serial.println(joint_current_position[limb].normalized_position);
 
-        Serial.println("c to return");
+        Serial.println(F("c to return"));
     }
     return false;
 }

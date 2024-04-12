@@ -2,18 +2,15 @@
 #define MOVEMENT_H
 
 #include "stdint.h"
+#include "variables.h"
 
-int16_t normalize_range_bodypart(int16_t bodypart, int i);
+int16_t normalize_servo_value(int16_t value, int bodypart);
 
-void switch_stance(int stance);
+void switch_stance(Stance stance);
 
-void body_part_max_min(int limb);
+void body_part_max_min(Bodypart limb);
 
-float* setup_parts();
-
-uint16_t* setup_centers();
-
-void move_limb_to(int16_t limb, int16_t location);
+void move_limb_to(Bodypart limb, int16_t normalized_location);
 
 void calculations();
 
