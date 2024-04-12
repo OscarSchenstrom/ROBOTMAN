@@ -10,7 +10,7 @@ void handle_inputs() {
     static bool output_mode_state{true};
     static char input_string[SMALL_STRING_LENGTH];
 
-    if(!MENY_LIST){
+    if(!MENU_LIST){
         Serial.println();
         Serial.println(F("Command Meny"));
         Serial.println(F("i - Initial Stance"));
@@ -21,7 +21,7 @@ void handle_inputs() {
         Serial.println(F("S - List Servo Positions"));
         Serial.println(F("s - Switch stance"));
         Serial.println(F("c - to return to this meny"));
-        MENY_LIST = true;
+        MENU_LIST = true;
     }
 
     if (read_data(input_string)) {
@@ -32,12 +32,12 @@ void handle_inputs() {
                 move_limbs_mode = false;
             }
         } else if (input_string[0] == 'c') {
-            MENY_LIST = false;
+            MENU_LIST = false;
         } else if (input_string[0] == 'i') {
             Serial.println(F("Init stance"));
             STANCE_CURRENT = STANCE_IDLE;
             switch_stance(STANCE_CURRENT);
-            MENY_LIST = false;
+            MENU_LIST = false;
         } else if (input_string[0] == 'm') {
             print_body_parts();
             move_limbs_mode = true;
@@ -54,7 +54,7 @@ void handle_inputs() {
                 }
                 pwm.setOutputMode(true);
             }
-            MENY_LIST = false;
+            MENU_LIST = false;
         } else if (input_string[0] == 'C') {
             if (output_mode_state) {
                 Serial.println(F("Input off"));
@@ -64,12 +64,12 @@ void handle_inputs() {
                 output_mode_state = true;
             }
             pwm.setOutputMode(output_mode_state);
-            MENY_LIST = false;
+            MENU_LIST = false;
         } else if (input_string[0] == 'D') {
             if (DEBUG_MODE) {
                 DEBUG_MODE = false;
                 Serial.println(F("DEBUG_MODE off"));
-                MENY_LIST = false;
+                MENU_LIST = false;
             } else {
                 DEBUG_MODE = true;
                 Serial.println(F("DEBUG_MODE on"));
@@ -90,10 +90,10 @@ void handle_inputs() {
                 STANCE_CURRENT = STANCE_IDLE;
             }
             switch_stance(STANCE_CURRENT);
-            MENY_LIST = false;
+            MENU_LIST = false;
         } else if (input_int >= 0 && input_int <= 16) {
             body_part_max_min(input_int);
-            MENY_LIST = false;
+            MENU_LIST = false;
         }
     }
 }
@@ -118,7 +118,7 @@ bool move_limbs_handler(char* serial_input_string) {
     if (serial_input_string[0] == 'c') {
         if (limb == -1) {
             Serial.println(F("exiting"));
-            MENY_LIST = false;
+            MENU_LIST = false;
             return true;
         } else {
             limb = -1;

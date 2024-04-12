@@ -38,7 +38,6 @@ int16_t joint_definitions[BODYPART_COUNT][JOINT_PLACEMENT_COUNT]{
     {300, 520, -1},  // RIGHT_ANKLE     13
     {200, 400, 1},   // LEFT_FOOT       14
     {200, 500, -1},  // RIGHT_FOOT      15 
-    //{100, 520, 1}    // HEAD            16
 };
 
 int16_t stance_array[BODYPART_COUNT][STANCE_COUNT]{
@@ -58,7 +57,6 @@ int16_t stance_array[BODYPART_COUNT][STANCE_COUNT]{
     {355, 340, 340},  // RIGHT_ANKLE
     {300, 300, 300},  // LEFT_FOOT
     {370, 370, 370},  // RIGHT_FOOT 
-    //{255, 255, 255}   // HEAD
 };
 
 JointCurrentPosition joint_current_position[BODYPART_COUNT];
@@ -66,7 +64,7 @@ JointCurrentPosition joint_current_position[BODYPART_COUNT];
 Stance STANCE_CURRENT{STANCE_IDLE};
 bool BALANCE_MODE{false};
 bool DEBUG_MODE{false};
-bool MENY_LIST{false};
+bool MENU_LIST{false};
 
 // Create a PWM object from the Adafruit library
 Adafruit_PWMServoDriver pwm{Adafruit_PWMServoDriver()};

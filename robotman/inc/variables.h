@@ -81,7 +81,7 @@ extern JointCurrentPosition joint_current_position[BODYPART_COUNT];
 extern Stance STANCE_CURRENT;
 extern bool BALANCE_MODE;
 extern bool DEBUG_MODE;
-extern bool MENY_LIST;
+extern bool MENU_LIST;
 
 // Create a PWM object from the Adafruit library
 extern Adafruit_PWMServoDriver pwm;
